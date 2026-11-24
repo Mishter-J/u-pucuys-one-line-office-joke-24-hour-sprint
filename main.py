@@ -13,6 +13,15 @@ import os
 JOKE = "The intern asked what 'ASAP' means, so I said 'it means your Friday is cancelled' — she's now the CEO of a startup."
 
 def main():
+    # Self-check: mirror the make.fun gate before writing, so a bad
+    # entry can never reach /output/entry.txt silently.
+    text = JOKE.encode("utf-8")  # raises UnicodeEncodeError if not UTF-8
+    if not (1 <= len(JOKE) <= 200):
+        raise ValueError(
+            f"entry length {len(JOKE)} chars is outside the 1-200 gate"
+        )
+    if not JOKE.strip():
+        raise ValueError("entry is blank or only whitespace")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8", newline="") as f:
